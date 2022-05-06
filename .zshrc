@@ -5,7 +5,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="ys"
 
 # plugins
-plugins=(git)
+plugins=(git golang rust terraform)
 
 # source oh-my-zsh stuff
 source $ZSH/oh-my-zsh.sh
