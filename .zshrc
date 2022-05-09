@@ -21,3 +21,7 @@ export PATH=$PATH:$HOME/.local/bin
 
 # load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# load secrets
+source $HOME/.secrets.sh
+

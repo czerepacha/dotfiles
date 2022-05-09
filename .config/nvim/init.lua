@@ -27,6 +27,10 @@ vim.cmd [[
   tnoremap <Esc> <C-\><C-n>
   " Enable C-R in terminal mode
   tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  set expandtab
+  set tabstop=2
+  set softtabstop=2
+  set shiftwidth=2
 ]]
 
 --Set highlight on search
@@ -35,8 +39,8 @@ vim.o.hlsearch = true
 --Make line numbers default
 vim.wo.number = true
 
---Enable mouse mode
-vim.o.mouse = 'a'
+--Disable mouse mode
+vim.o.mouse = ''
 
 --Enable break indent
 vim.o.breakindent = false
@@ -224,7 +228,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
-local servers = { 'gopls', 'rust_analyzer', "sumneko_lua", "golangci_lint_ls"}
+local servers = { 'gopls', 'rust_analyzer', "sumneko_lua", "golangci_lint_ls", "terraformls"}
 
 -- Ensure servers are installed
 require('nvim-lsp-installer').setup {
