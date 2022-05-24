@@ -1,31 +1,39 @@
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Package manager
-  -- UI to select things (files, grep results, open buffers...)
+  use 'tpope/vim-fugitive' -- Git commands in nvim
   use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use 'mjlbach/onedark.nvim' -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
-  -- Add indentation guides even on blank lines
-  use 'lukas-reineke/indent-blankline.nvim'
-  -- Add git related info in the signs columns and popups
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  -- Highlight, edit, and navigate code using a fast incremental parsing library
-  use 'nvim-treesitter/nvim-treesitter'
-  -- Additional textobjects for treesitter
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
+  use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
+  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } } -- Add git related info in the signs columns and popups
+  use 'nvim-treesitter/nvim-treesitter' -- Highlight, edit, and navigate code using a fast incremental parsing library
+  use 'nvim-treesitter/nvim-treesitter-textobjects' -- Additional textobjects for treesitter
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
   use 'williamboman/nvim-lsp-installer' -- Automatically install language servers
-  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
   use 'windwp/nvim-autopairs' -- Autopairs plugin
+  use 'github/copilot.vim' -- github copilot
+  use {
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
+    requires = {
+      { "ms-jpq/coq.artifacts", branch = "artifacts" },
+      { "ms-jpq/coq.thirdparty", branch = "3p" },
+    },
+    disable = false,
+  }
 end)
 
+vim.g.coq_settings = {
+  auto_start = true,
+}
+
+require "coq"
+
 vim.cmd [[
-  " <Esc> exists to normal mode from terminal mode
+  " <Esc> exits terminal insert mode
   tnoremap <Esc> <C-\><C-n>
-  " Enable C-R in terminal mode
+  " Allow <C-R> in terminal insert mode
   tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
   set expandtab
   set tabstop=2
@@ -43,7 +51,7 @@ vim.wo.number = true
 vim.o.mouse = ''
 
 --Enable break indent
-vim.o.breakindent = false
+vim.o.breakindent = true
 
 --Save undo history
 vim.opt.undofile = true
@@ -61,7 +69,7 @@ vim.o.termguicolors = true
 vim.cmd [[colorscheme onedark]]
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 
 --Set statusbar
 require('lualine').setup {
@@ -143,10 +151,12 @@ end)
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles)
 
 -- Treesitter configuration
--- Parsers must be installed manually via :TSInstall
 require('nvim-treesitter.configs').setup {
   highlight = {
-    enable = true, -- false will disable the whole extension
+    enable = true,
+  },
+  indent = {
+    enable = true,
   },
   incremental_selection = {
     enable = true,
@@ -156,9 +166,6 @@ require('nvim-treesitter.configs').setup {
       scope_incremental = 'grc',
       node_decremental = 'grm',
     },
-  },
-  indent = {
-    enable = true,
   },
   textobjects = {
     select = {
@@ -193,6 +200,7 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+  autopairs = { enable = true },
 }
 
 -- Diagnostic keymaps
@@ -223,12 +231,8 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
 end
 
--- nvim-cmp supports additional completion capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
 -- Enable the following language servers
-local servers = { 'gopls', 'rust_analyzer', "sumneko_lua", "golangci_lint_ls", "terraformls"}
+local servers = { 'gopls', 'rust_analyzer', "sumneko_lua", "golangci_lint_ls", "terraformls" }
 
 -- Ensure servers are installed
 require('nvim-lsp-installer').setup {
@@ -236,23 +240,19 @@ require('nvim-lsp-installer').setup {
 }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  lspconfig[lsp].setup(coq.lsp_ensure_capabilities({
     on_attach = on_attach,
-    capabilities = capabilities,
-  }
+  }))
 end
 
--- golang lsp setup
-require'lspconfig'.golangci_lint_ls.setup {}
-require'lspconfig'.gopls.setup {}
-
--- rust lsp setup
-require'lspconfig'.rust_analyzer.setup {}
+-- Make runtime files discoverable to the server
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
 
 -- Lua lsp setup
 lspconfig.sumneko_lua.setup {
   on_attach = on_attach,
-  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -276,48 +276,3 @@ lspconfig.sumneko_lua.setup {
     },
   },
 }
-
--- luasnip setup
-local luasnip = require 'luasnip'
-
--- nvim-cmp setup
-local cmp = require 'cmp'
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  }),
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-}
--- vim: ts=2 sts=2 sw=2 et
