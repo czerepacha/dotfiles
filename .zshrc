@@ -1,9 +1,10 @@
 export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
 
 ZSH_THEME="ys"
 
 plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:$HOME/.dotnet"
 export EDITOR="vim"
