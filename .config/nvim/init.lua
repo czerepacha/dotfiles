@@ -29,6 +29,9 @@ vim.g.coq_settings = {
 }
 
 require "coq"
+require "coq_3p" {
+  { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
+}
 
 vim.cmd [[
   " <Esc> exits terminal insert mode
