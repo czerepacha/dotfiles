@@ -14,6 +14,12 @@ require('packer').startup(function(use)
   use 'windwp/nvim-autopairs' -- Autopairs plugin
   use 'github/copilot.vim' -- github copilot
   use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {}
+  end
+}
+  use {
     'ms-jpq/coq_nvim',
     branch = 'coq',
     requires = {
@@ -28,6 +34,7 @@ vim.g.coq_settings = {
   auto_start = true,
 }
 
+require "which-key"
 require "coq"
 require "coq_3p" {
   { src = "copilot", short_name = "COP", accept_key = "<c-f>" },
