@@ -10,8 +10,10 @@ source $HOME/.cargo/env
 export PATH="$PATH:$HOME/.dotnet"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:/usr/local/go/bin"
 
 export EDITOR="vim"
+alias vim=nvim
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
