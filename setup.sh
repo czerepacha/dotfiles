@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # install packages
-sudo apt-get install -y zsh curl
+sudo apt-get install -y zsh curl git
 
 # install neovim
 if ! echo "dce77cae95c2c115e43159169e2d2faaf93bce6862d5adad7262f3aa3cf60df8 /tmp/nvim-linux64.deb" | sha256sum -c; then
