@@ -14,6 +14,8 @@ export PATH="$PATH:/usr/local/go/bin"
 
 export EDITOR="vim"
 alias vim=nvim
+alias python=python3
+alias pip=pip3
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
