@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # versions
-NVIM_RELEASE="v0.7.2"
+NVIM_RELEASE="v0.8.1"
 GO_VERSION="1.19"
 RUST_VERSION="stable"
 
