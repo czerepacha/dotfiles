@@ -30,17 +30,26 @@ sudo chmod -R a+rx /usr/local/go
 rm -rf ~/.oh-my-zsh
 CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# install astrovim
+# install lunarvim
 rm -rf ~/.config/nvim
 mkdir -p ~/.config/nvim
-git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+(cd /tmp && curl -LO https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+bash /tmp/install.sh -y
 
 # install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 
+# install ripgrep
+(cd /tmp && curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb)
+sudo dpkg -i /tmp/ripgrep_13.0.0_amd64.deb
+
+# install bat
+(cd /tmp && curl -LO https://github.com/sharkdp/bat/releases/download/v0.22.1/bat_0.22.1_amd64.deb)
+sudo dpkg -i /tmp/bat_0.22.1_amd64.deb
+
 # set up dotfiles
 touch ~/.secrets.sh
-ln -sf $(pwd)/.zshrc ~/.zshrc
+ln -sf "$(pwd)/.zshrc" ~/.zshrc
 mkdir -p ~/go/bin
 
