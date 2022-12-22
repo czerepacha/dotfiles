@@ -6,7 +6,7 @@ GO_VERSION="1.19"
 RUST_VERSION="stable"
 
 # install packages
-sudo apt-get install -y zsh curl git
+sudo apt-get install -y zsh curl git make python3 python3-pip
 
 # install kubectl
 sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -25,6 +25,12 @@ sudo rm -rf /usr/local/go
 sudo wget -O "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
 sudo tar -C /usr/local -xzf "/tmp/${GORELEASE}"
 sudo chmod -R a+rx /usr/local/go
+
+# install nvm
+curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+nvm use --lts
 
 # install oh-my-zsh
 rm -rf ~/.oh-my-zsh
