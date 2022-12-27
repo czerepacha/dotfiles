@@ -7,6 +7,10 @@ plugins=(git golang)
 source $ZSH/oh-my-zsh.sh
 source $HOME/.cargo/env
 
+
+export GOPATH="$HOME/go"
+
+export PATH="$PATH:$GOPATH"
 export PATH="$PATH:$HOME/.dotnet"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:$HOME/.local/bin"
