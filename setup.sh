@@ -6,15 +6,15 @@ GO_VERSION="1.19"
 RUST_VERSION="stable"
 
 # install packages
-sudo apt-get install -y zsh curl git make python3 python3-pip
+sudo apt-get -qq install -y zsh curl git make python3 python3-pip
 
 # install kubectl
-sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo chmod 755 ./kubectl && sudo mv ./kubectl /usr/local/bin/
+sudo curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
+sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
 
 # install neovim
-sudo wget -O /tmp/nvim-linux64.deb "https://github.com/neovim/neovim/releases/download/${NVIM_RELEASE}/nvim-linux64.deb"
-sudo apt install /tmp/nvim-linux64.deb
+sudo wget -qO /tmp/nvim-linux64.deb "https://github.com/neovim/neovim/releases/download/${NVIM_RELEASE}/nvim-linux64.deb"
+sudo apt-get -qq install /tmp/nvim-linux64.deb
 
 # install rust
 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain "${RUST_VERSION}"
@@ -22,7 +22,7 @@ curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain "${RUST_VERSION
 # install go
 GORELEASE="go${GO_VERSION}.linux-amd64.tar.gz"
 sudo rm -rf /usr/local/go
-sudo wget -O "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
+sudo wget -qO "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
 sudo tar -C /usr/local -xzf "/tmp/${GORELEASE}"
 sudo chmod -R a+rx /usr/local/go
 
@@ -43,6 +43,7 @@ mkdir -p ~/.config/nvim
 bash /tmp/install.sh -y
 
 # install fzf
+rm -rf ~/.fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 
