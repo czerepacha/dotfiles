@@ -42,11 +42,8 @@ sudo apt-get -qq update && sudo apt-get -qq install nodejs > /dev/null 2>&1
 rm -rf ~/.oh-my-zsh
 CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2>&1
 
-# install lunarvim
-rm -rf ~/.config/nvim
-mkdir -p ~/.config/nvim
-(cd /tmp && curl -sLO https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
-bash /tmp/install.sh -y > /dev/null 2>&1
+# install astronvim
+git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
 # install fzf
 rm -rf ~/.fzf

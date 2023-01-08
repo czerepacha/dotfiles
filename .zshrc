@@ -17,7 +17,7 @@ export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:/usr/local/go/bin"
 
 export EDITOR="vim"
-alias vim=lvim
+alias vim=nvim
 alias python=python3
 alias pip=pip3
 alias cat=bat
