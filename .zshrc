@@ -12,11 +12,12 @@ export GOPATH="$HOME/go"
 
 export PATH="$PATH:$GOPATH"
 export PATH="$PATH:$HOME/.dotnet"
+export PATH="$PATH:$HOME/.dotnet/tools"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:/usr/local/go/bin"
 
-export EDITOR="vim"
+export EDITOR="nvim"
 alias vim=nvim
 alias python=python3
 alias pip=pip3

@@ -3,7 +3,7 @@
 set -e -v
 
 # versions
-NVIM_RELEASE="v0.8.1"
+NVIM_RELEASE="v0.8.3"
 GO_VERSION="1.19"
 RUST_VERSION="stable"
 
