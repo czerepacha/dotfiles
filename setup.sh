@@ -3,9 +3,8 @@
 set -e -v
 
 # versions
-NVIM_RELEASE="v0.8.3"
-GO_VERSION="1.19"
-RUST_VERSION="stable"
+NVIM_RELEASE="v0.9.4"
+GO_VERSION="1.21.3"
 
 # install packages
 sudo apt-get -qq install -y zsh curl git make python3 python3-pip software-properties-common
@@ -15,8 +14,8 @@ sudo curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/
 sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
 
 # install neovim
-sudo wget -qO /tmp/nvim-linux64.deb "https://github.com/neovim/neovim/releases/download/${NVIM_RELEASE}/nvim-linux64.deb"
-sudo apt-get -qq install /tmp/nvim-linux64.deb
+sudo wget -qO /tmp/nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_RELEASE}/nvim-linux64.tar.gz"
+tar -xvf  /tmp/nvim-linux64.tar.gz -C "${HOME}/.local"
 
 # install rust
 wget -qO /tmp/rustup-init "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"
@@ -30,19 +29,20 @@ sudo tar -C /usr/local -xzf "/tmp/${GORELEASE}"
 sudo chmod -R a+rx /usr/local/go
 
 # install nodejs
-DISTRO="$(lsb_release -s -c)"
-VERSION=node_18.x
-KEYRING=/usr/share/keyrings/nodesource.gpg
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" > /dev/null 2>&1
-echo "deb https://deb.nodesource.com/node_18.x kinetic main" | sudo tee /etc/apt/sources.list.d/nodesource.list > /dev/null 2>&1
-echo "deb-src https://deb.nodesource.com/node_18.x kinetic main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list> /dev/null 2>&1
-sudo apt-get -qq update && sudo apt-get -qq install nodejs > /dev/null 2>&1
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+NODE_MAJOR=18
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update
+sudo apt-get install nodejs -y
 
 # install oh-my-zsh
 rm -rf ~/.oh-my-zsh
 CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2>&1
 
 # install astronvim
+rm -rf ~/.config/nvim
 git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
 # install fzf
@@ -60,6 +60,5 @@ sudo dpkg -i /tmp/bat_0.22.1_amd64.deb > /dev/null 2>&1
 
 # set up dotfiles
 touch ~/.secrets.sh
-ln -sf "$(pwd)/.zshrc" ~/.zshrc
+ln -sf "${PWD}/.zshrc" ~/.zshrc
 mkdir -p ~/go/bin
-
