@@ -25,3 +25,8 @@ alias cat=bat
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# disable paging for bat
+export BAT_PAGER=""
+
+# krew path
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
