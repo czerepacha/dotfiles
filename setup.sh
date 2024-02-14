@@ -58,10 +58,12 @@ sudo dpkg -i /tmp/ripgrep_13.0.0_amd64.deb >/dev/null 2>&1
 (cd /tmp && curl -sLO https://github.com/sharkdp/bat/releases/download/v0.22.1/bat_0.22.1_amd64.deb)
 sudo dpkg -i /tmp/bat_0.22.1_amd64.deb >/dev/null 2>&1
 
+# set up fonts
+wget -qO /tmp/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraCode.zip
+unzip /tmp/FiraCode.zip -d ~/.fonts
+
 # set up dotfiles
 touch ~/.secrets.sh
 mkdir -p ~/.config/nvim
 mkdir -p ~/go/bin
 ln -sf "${PWD}/.zshrc" ~/.zshrc
-ln -sf "${PWD}/nvim-config" ~/.config/nvim
-
