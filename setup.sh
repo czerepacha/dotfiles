@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e -v
 
@@ -21,8 +21,12 @@ sudo add-apt-repository -s -y ppa:dotnet/backports >/dev/null 2>&1
 sudo apt-get -qq install -y dotnet-sdk-8.0 dotnet-sdk-7.0 dotnet-sdk-6.0
 
 # install kubectl
-sudo curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
-sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
+RELEASE_SHA512=$(curl -sL https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512)
+LOCAL_SHA512=$(sha512sum $(which kubectl) | cut -d ' ' -f1)
+if [[ ${LOCAL_SHA512} != ${RELEASE_SHA512} ]]; then
+	sudo curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
+	sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
+fi
 
 # install neovim
 sudo wget -qO /tmp/nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_RELEASE}/nvim-linux64.tar.gz"
@@ -33,9 +37,16 @@ wget -qO /tmp/rustup-init "https://static.rust-lang.org/rustup/dist/x86_64-unkno
 chmod +x /tmp/rustup-init && /tmp/rustup-init -y --quiet --default-toolchain stable >/dev/null 2>&1
 
 # install go
+# checksums: https://go.dev/dl/
 GORELEASE="go${GO_VERSION}.linux-amd64.tar.gz"
+GORELEASE_SHA256SUM="374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9"
+GOLOCAL_SHA256SUM=$(sha256sum /tmp/${GORELEASE} | cut -d ' ' -f1)
+
+if [[ ${GORELEASE_SHA256SUM} != ${GOLOCAL_SHA256SUM} ]]; then
+	sudo wget -qO "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
+fi
+
 sudo rm -rf /usr/local/go
-sudo wget -qO "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
 sudo tar -C /usr/local -xzf "/tmp/${GORELEASE}"
 sudo chmod -R a+rx /usr/local/go
 
