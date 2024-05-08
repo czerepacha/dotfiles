@@ -21,9 +21,9 @@ sudo add-apt-repository -s -y ppa:dotnet/backports >/dev/null 2>&1
 sudo apt-get -qq install -y dotnet-sdk-8.0 dotnet-sdk-7.0 dotnet-sdk-6.0
 
 # install kubectl
-RELEASE_SHA512=$(curl -sL https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512)
-LOCAL_SHA512=$(sha512sum $(which kubectl) | cut -d ' ' -f1)
-if [[ ${LOCAL_SHA512} != ${RELEASE_SHA512} ]]; then
+kubectl_release_sha512sum=$(curl -sL https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512)
+kubectl_local_sha512sum=$(sha512sum /usr/local/bin/kubectl | cut -d ' ' -f1)
+if [[ ${kubectl_release_sha512sum} != ${kubectl_local_sha512sum} ]]; then
 	sudo curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
 	sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
 fi
@@ -77,5 +77,5 @@ sudo dpkg -i /tmp/ripgrep_13.0.0_amd64.deb >/dev/null 2>&1
 sudo dpkg -i /tmp/bat_0.22.1_amd64.deb >/dev/null 2>&1
 
 # prepare links
-rm ~/.zshrc && ln -sf "${PWD}/.zshrc" ~/.zshrc
-rm ~/.config/nvim && ln -sf "${PWD}/nvim" ~/.config/nvim
+rm -rf ~/.zshrc && ln -sf "${PWD}/.zshrc" ~/.zshrc
+rm -rf ~/.config/nvim && ln -sf "${PWD}/nvim" ~/.config/nvim
