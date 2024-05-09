@@ -38,12 +38,12 @@ chmod +x /tmp/rustup-init && /tmp/rustup-init -y --quiet --default-toolchain sta
 
 # install go
 # checksums: https://go.dev/dl/
-GORELEASE="go${GO_VERSION}.linux-amd64.tar.gz"
-GORELEASE_SHA256SUM="374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9"
-GOLOCAL_SHA256SUM=$(sha256sum /tmp/${GORELEASE} | cut -d ' ' -f1)
+go_release="go${GO_VERSION}.linux-amd64.tar.gz"
+go_release_sha256sum="374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9"
+go_local_sha256sum=$(sha256sum /tmp/${GORELEASE} | cut -d ' ' -f1)
 
-if [[ ${GORELEASE_SHA256SUM} != ${GOLOCAL_SHA256SUM} ]]; then
-	sudo wget -qO "/tmp/${GORELEASE}" "https://go.dev/dl/${GORELEASE}"
+if [[ ${go_release_sha256sum} != ${go_local_sha256sumOCAL_SHA256SUM} ]]; then
+	sudo wget -qO "/tmp/${go_release}" "https://go.dev/dl/${go_release}"
 fi
 
 sudo rm -rf /usr/local/go
