@@ -1,8 +1,9 @@
 return {
+  { "navarasu/onedark.nvim" },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "onehalfdark",
+      colorscheme = "onedark",
     },
   },
 }
