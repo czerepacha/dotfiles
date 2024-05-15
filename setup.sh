@@ -3,8 +3,8 @@
 set -e -v
 
 # versions
-NVIM_RELEASE="v0.9.5"
-GO_VERSION="1.22.2"
+declare -r NVIM_RELEASE="v0.9.5"
+declare -r GO_VERSION="1.22.3"
 
 # home prep
 touch ~/.secrets.sh
@@ -21,9 +21,9 @@ sudo add-apt-repository -s -y ppa:dotnet/backports >/dev/null 2>&1
 sudo apt-get -qq install -y dotnet-sdk-8.0 dotnet-sdk-7.0 dotnet-sdk-6.0
 
 # install kubectl
-kubectl_release_sha512sum=$(curl -sL https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512)
+kubectl_release_sha512sum=$(curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512")
 kubectl_local_sha512sum=$(sha512sum /usr/local/bin/kubectl | cut -d ' ' -f1)
-if [[ ${kubectl_release_sha512sum} != ${kubectl_local_sha512sum} ]]; then
+if [[ ${kubectl_release_sha512sum} != "${kubectl_local_sha512sum}" ]]; then
 	sudo curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
 	sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
 fi
@@ -40,14 +40,14 @@ chmod +x /tmp/rustup-init && /tmp/rustup-init -y --quiet --default-toolchain sta
 # checksums: https://go.dev/dl/
 go_release="go${GO_VERSION}.linux-amd64.tar.gz"
 go_release_sha256sum="374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9"
-go_local_sha256sum=$(sha256sum /tmp/${GORELEASE} | cut -d ' ' -f1)
+go_local_sha256sum=$(sha256sum /tmp/${go_release} | cut -d ' ' -f1)
 
-if [[ ${go_release_sha256sum} != ${go_local_sha256sumOCAL_SHA256SUM} ]]; then
+if [[ ${go_release_sha256sum} != "${go_local_sha256sum}" ]]; then
 	sudo wget -qO "/tmp/${go_release}" "https://go.dev/dl/${go_release}"
 fi
 
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "/tmp/${GORELEASE}"
+sudo tar -C /usr/local -xzf "/tmp/${go_release}"
 sudo chmod -R a+rx /usr/local/go
 
 # install nodejs
@@ -69,11 +69,11 @@ git clone -q --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all >/dev/null 2>&1
 
 # install ripgrep
-(cd /tmp && curl -sLO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb)
+(cd /tmp && curl -sLO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0_amd64.deb)
 sudo dpkg -i /tmp/ripgrep_13.0.0_amd64.deb >/dev/null 2>&1
 
 # install bat
-(cd /tmp && curl -sLO https://github.com/sharkdp/bat/releases/download/v0.22.1/bat_0.22.1_amd64.deb)
+(cd /tmp && curl -sLO https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb)
 sudo dpkg -i /tmp/bat_0.22.1_amd64.deb >/dev/null 2>&1
 
 # prepare links
