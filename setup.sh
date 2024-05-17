@@ -69,12 +69,12 @@ git clone -q --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all >/dev/null 2>&1
 
 # install ripgrep
-(cd /tmp && curl -sLO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0_amd64.deb)
-sudo dpkg -i /tmp/ripgrep_13.0.0_amd64.deb >/dev/null 2>&1
+(cd /tmp && curl -sLO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb)
+sudo dpkg -i /tmp/ripgrep_14.1.0-1_amd64.deb >/dev/null 2>&1
 
 # install bat
 (cd /tmp && curl -sLO https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb)
-sudo dpkg -i /tmp/bat_0.22.1_amd64.deb >/dev/null 2>&1
+sudo dpkg -i /tmp/bat_0.24.0_amd64.deb >/dev/null 2>&1
 
 # prepare links
 rm -rf ~/.zshrc && ln -sf "${PWD}/.zshrc" ~/.zshrc
