@@ -3,7 +3,7 @@
 set -e -v
 
 # versions
-declare -r NVIM_RELEASE="v0.9.5"
+declare -r NVIM_RELEASE="v0.10.0"
 declare -r GO_VERSION="1.22.3"
 
 # home prep

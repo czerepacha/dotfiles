@@ -1,9 +1,9 @@
 {
   "extras": [
-    "lazyvim.plugins.extras.coding.native_snippets"
+    "lazyvim.plugins.extras.lsp.none-ls"
   ],
   "news": {
-    "NEWS.md": "3314"
+    "NEWS.md": "4828"
   },
   "version": 3
 }
