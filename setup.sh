@@ -3,8 +3,8 @@
 set -e -v
 
 # versions
-declare -r NVIM_RELEASE="v0.10.0"
-declare -r GO_VERSION="1.22.3"
+declare -r NVIM_RELEASE="v0.10.2"
+declare -r GO_VERSION="1.23.2"
 
 # home prep
 touch ~/.secrets.sh
@@ -24,8 +24,8 @@ sudo apt-get -qq install -y dotnet-sdk-8.0 dotnet-sdk-7.0 dotnet-sdk-6.0
 kubectl_release_sha512sum=$(curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha512")
 kubectl_local_sha512sum=$(sha512sum /usr/local/bin/kubectl | cut -d ' ' -f1)
 if [[ ${kubectl_release_sha512sum} != "${kubectl_local_sha512sum}" ]]; then
-	sudo curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
-	sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
+  sudo curl -sL "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
+  sudo chmod 755 /tmp/kubectl && sudo mv /tmp/kubectl /usr/local/bin/
 fi
 
 # install neovim
@@ -39,11 +39,11 @@ chmod +x /tmp/rustup-init && /tmp/rustup-init -y --quiet --default-toolchain sta
 # install go
 # checksums: https://go.dev/dl/
 go_release="go${GO_VERSION}.linux-amd64.tar.gz"
-go_release_sha256sum="374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9"
+go_release_sha256sum="542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e"
 go_local_sha256sum=$(sha256sum /tmp/${go_release} | cut -d ' ' -f1)
 
 if [[ ${go_release_sha256sum} != "${go_local_sha256sum}" ]]; then
-	sudo wget -qO "/tmp/${go_release}" "https://go.dev/dl/${go_release}"
+  sudo wget -qO "/tmp/${go_release}" "https://go.dev/dl/${go_release}"
 fi
 
 sudo rm -rf /usr/local/go
